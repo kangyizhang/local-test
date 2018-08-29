@@ -24,6 +24,8 @@ const data = require('./data');
 const model = require('./model');
 
 async function run(epochs, batchSize, modelSavePath) {
+  console.log('this is added in local-test-branch');
+
   await data.loadData();
 
   const {images: trainImages, labels: trainLabels} = data.getTrainData();
@@ -33,8 +35,7 @@ async function run(epochs, batchSize, modelSavePath) {
   let epochBeginTime;
   let millisPerStep;
   const validationSplit = 0.15;
-  const numTrainExamplesPerEpoch =
-      trainImages.shape[0] * (1 - validationSplit);
+  const numTrainExamplesPerEpoch = trainImages.shape[0] * (1 - validationSplit);
   const numTrainBatchesPerEpoch =
       Math.ceil(numTrainExamplesPerEpoch / batchSize);
   await model.fit(trainImages, trainLabels, {
@@ -73,19 +74,17 @@ async function run(epochs, batchSize, modelSavePath) {
 
   console.log(
       `\nEvaluation result:\n` +
-      `  Loss = ${evalOutput[0].dataSync()[0].toFixed(3)}; `+
+      `  Loss = ${evalOutput[0].dataSync()[0].toFixed(3)}; ` +
       `Accuracy = ${evalOutput[1].dataSync()[0].toFixed(3)}`);
 
   if (modelSavePath != null) {
     await model.save(`file://${modelSavePath}`);
     console.log(`Saved model to path: ${modelSavePath}`);
-  }  
+  }
 }
 
-const parser = new argparse.ArgumentParser({
-  description: 'TensorFlow.js-Node MNIST Example.',
-  addHelp: true
-});
+const parser = new argparse.ArgumentParser(
+    {description: 'TensorFlow.js-Node MNIST Example.', addHelp: true});
 parser.addArgument('--epochs', {
   type: 'int',
   defaultValue: 20,
